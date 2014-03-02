@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+<title>Pathfinder Character Sheet</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" type="text/css" />
+
+<script type="text/javascript" src="base.js"></script>
+<script type="text/javascript" src="pathfinder.js"></script>
+<script type="text/javascript" src="generator.js"></script>
+</head>
+<body>
+
+<div id="screenOnly">
+
+<div id="tabs">
+  <ul>
+    <li><a href="#tabIntro">Intro</a></li>
+    <li><a href="#tabBasicInfo">Basics</a></li>
+    <li><a href="#tabAbilities">Abilities</a></li>
+  </ul>
+
+  <div id="tabIntro">
+    <p>This page guides you through the process of creating a Pathfinder character.</p>
+	<p>When you're done, simply print this page and it will be formatted like a character sheet.<br/>We recommend disabling headers &amp; footers, and enabling background colors and images.</p>
+  </div>
+  <div id="tabBasicInfo">
+	<table>
+		<tr><th>Character Level</th><td><input type="number" id="characterLevel" min="1" max="30" value="1" /></td><td class="help" colspan="2">The total number of levels this character possesses. Typically 1 for new characters.</td></tr>
+		<tr><th>Character Name</th><td><input type="text" id="characterName" /></td><td class="help" colspan="2">The name of this character</td></tr>
+		<tr><th>Player Name</th><td><input type="text" id="playerName" /></td><td class="help" colspan="2">The name of the player who uses this character</td></tr>
+		<tr><th>Alignment</th>
+			<td>
+				<select id="alignment">
+					<option value="LG">Lawful Good</option>
+					<option value="NG">Neutral Good</option>
+					<option value="CG">Chaotic Good</option>
+					<option value="LN">Lawful Neutral</option>
+					<option value="N" selected>True Neutral</option>
+					<option value="CN">Chaotic Neutral</option>
+					<option value="LE">Lawful Evil</option>
+					<option value="NE">Neutral Evil</option>
+					<option value="CE">Chaotic Evil</option>
+				</select>
+			</td><td class="help" colspan="2">See the PRD page on <a href="http://paizo.com/pathfinderRPG/prd/ultimateCampaign/campaignSystems/alignment.html">Alignment</a></td></tr>
+		<tr><th>Race</th><td><select id="race"></select></td><td class="help" colspan="2">See the PRD page on <a href="http://paizo.com/prd/races.html">Races</a></td></tr>
+		<tr><th>Size</th><td><select id="size"></select></td><td class="help" colspan="2">Almost always determined by your race</td></tr>
+		<tr><td colspan="4" class="help spacer">The fields below help define your character, but they don't affect its mechanics.</td></tr>
+		<tr><th>Deity</th><td><input type="text" id="deity" /></td><th>Homeland</th><td><input type="text" id="homeland" /></td></tr>
+		<tr><th>Gender</th><td><input type="text" id="gender" /></td><th>Age</th><td><input type="text" id="age" /></td><td class="help" colspan="2"></td></tr>
+		<tr><th>Height</th><td><input type="text" id="height" /></td><th>Weight</th><td><input type="text" id="weight" /></td><td class="help" colspan="2"></td></tr>
+		<tr><th>Hair</th><td><input type="text" id="hair" /></td><th>Eyes</th><td><input type="text" id="eyes" /></td><td class="help" colspan="2"></td></tr>
+	</table>
+  </div>
+  <div id="tabAbilities">
+	<p>Roll dice or whatever you do to determine your base ability scores, and enter them below.</p>
+    <table>
+		<tr class="heading">
+			<th>Ability</th>
+			<th>Base</th>
+			<th>Racial</th>
+			<th class="minLevel" level="4">4<sup>th</sup></th>
+			<th class="minLevel" level="8">8<sup>th</sup></th>
+			<th class="minLevel" level="12">12<sup>th</sup></th>
+			<th class="minLevel" level="16">16<sup>th</sup></th>
+			<th class="minLevel" level="20">20<sup>th</sup></th>
+			<th>Total</th>
+			<th>Modifier</th>
+		</tr>
+		
+		<tr id="abilityTableLastRow" class="help">
+			<td colspan="2">Points Spent: <span id="abTotalSpend">0</span></td>
+			<td colspan="3" id="abBaseTotalTier"></td>
+			<td colspan="5"></td>
+		</tr>
+		</tbody>
+		</table>
+  </div>
+</div>
+
+
+</div>
+
+<div id="printOnly">
+<div class="page">
+
+<div class="logo">
+<img src="pfrpg_logo.jpg" alt="logo" /><br />
+Character Sheet
+</div>
+
+<div class="basicInfo">
+
+<span class="labelInput"><label for="characterNameOut">Character Name</label> <input type="text" id="characterNameOut" /></span>
+<span class="labelInput"><label for="alignmentOut">Alignment</label> <input type="text" id="alignmentOut" class="center" /></span>
+<span class="labelInput"><label for="playerNameOut">Player</label> <input type="text" id="playerNameOut" /></span>
+<br/>
+<span class="labelInput"><label for="characterLevelOut">Character Level</label> <input type="text" id="characterLevelOut" /></span>
+<span class="labelInput"><label for="deityOut">Deity</label> <input type="text" id="deityOut" /></span>
+<span class="labelInput"><label for="homelandOut">Homeland</label> <input type="text" id="homelandOut" /></span>
+<br/>
+<span class="labelInput"><label for="raceOut">Race</label> <input type="text" id="raceOut" /></span>
+<span class="labelInput"><label for="sizeOut">Size</label> <input type="text" id="sizeOut" class="center" /></span>
+<span class="labelInput"><label for="genderOut">Gender</label> <input type="text" id="genderOut" class="center" /></span>
+<span class="labelInput"><label for="ageOut">Age</label> <input type="text" id="ageOut" class="center" /></span>
+<span class="labelInput"><label for="heightOut">Height</label> <input type="text" id="heightOut" class="center" /></span>
+<span class="labelInput"><label for="weightOut">Weight</label> <input type="text" id="weightOut" class="center" /></span>
+<span class="labelInput"><label for="hairOut">Hair</label> <input type="text" id="hairOut" class="center" /></span>
+<span class="labelInput"><label for="eyesOut">Eyes</label> <input type="text" id="eyesOut" class="center" /></span>
+
+</div>
+
+<div class="abilities">
+<table id="outAbilityTable">
+<tr>
+	<th class="small">Ability Name</th>
+	<th class="small num">Ability<br/>Score</th>
+	<th class="small num">Ability<br/>Modifier</th>
+	<th class="small num">Temp<br/>Adjust.</th>
+	<th class="small num">Temp<br/>Modifier</th>
+</tr>
+</table>
+</div>
+
+</div>
+<div class="page notFirst">
+
+Page 2
+
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,132 @@
+.center { text-align:center; }
+.right { text-align:right; }
+
+/*
+
+inputs in the screen layout only
+
+*/
+
+.heading, .heading th, .heading td
+{
+	font-weight:bold;
+}
+
+.heading sup
+{
+	font-weight:normal;
+}
+
+.help
+{
+	font-style:italic;
+	font-size:smaller;
+	color:#333
+}
+
+.help.spacer
+{
+	padding: 15px 0 5px 0;
+}
+
+#tabBasicInfo th
+{
+	text-align:right;
+}
+
+#tabAbilities input[type=number]
+{
+	width: 50px;
+	text-align:right;
+}
+
+
+/*
+
+elements in the print layout only
+
+*/
+
+/* general styling */
+.labelInput
+{
+	display:inline-block;
+	position:relative;
+}
+
+.black
+{
+	background-color:black;
+	color:white;
+	text-align:center;
+}
+
+.big { font-size: 18px; }
+.small, .subheading { font-size: 10px; }
+.subheading { position: relative; top: -4px; }
+.box { border: solid 1px black; text-align:center; }
+.num { width:35px; }
+
+table { border-spacing: 8px 4px; }
+th { font-weight: normal; }
+
+/* logo image */
+.logo { font-size: larger; }
+.logo img { width:200px; height:50px; }
+
+/* basic info */
+#printOnly .basicInfo
+{
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+#printOnly .basicInfo label { color:#666; }
+#characterNameOut, #playerNameOut { width: 200px; }
+#alignmentOut { width: 60px; }
+#characterLevelOut { width: 270px; }
+#deityOut { width: 90px; }
+#homelandOut { width: 75px; }
+#raceOut { width: 95px; }
+#sizeOut, #genderOut, #heightOut, #weightOut, #hairOut { width: 45px; }
+#ageOut{ width: 35px; }
+#eyesOut { width: 40px; }
+
+#printOnly .basicInfo input
+{
+	margin-bottom: 8px;
+}
+#printOnly .basicInfo label
+{
+	position:absolute;
+	font-size: 10px;
+	left: 6px;
+	top: 19px;
+}
+
+#printOnly .basicInfo input { border-width: 0px 0px 1px 0px; border-color: black; }
+
+/* abilities grid */
+#printOnly .abilities 
+{
+	position: absolute;
+	top: 95px;
+	left: 0px;
+}
+
+
+
+#screenOnly, #printOnly .page { position:relative; }
+
+@media screen
+{
+	#printOnly { display: none; }
+}
+@media print
+{
+	#screenOnly { display: none; }
+
+	body {margin:0; padding:0; line-height: 1em; word-spacing:1px; letter-spacing:0.2px; font: 13px Arial, Helvetica,"Lucida Grande", serif; color: #000; font-variant:small-caps;}
+	.page.notFirst	{ display: block; page-break-before: always; }
+	
+}
