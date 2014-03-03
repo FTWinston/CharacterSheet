@@ -3,9 +3,35 @@
 
 /*
 
-inputs in the screen layout only
+elements on the screen layout only
 
 */
+
+#helpPopup
+{
+	text-align:center;
+}
+#helpLeftBlock
+{
+	position:absolute;
+	top:0px; left:0px;
+	width:20px;
+	height:100%;
+	background-color:white;
+}
+
+#helpIframe
+{
+	width:804px;
+	height:502px;
+	overflow:hidden;
+    
+	margin-left:-247px;
+	
+    -webkit-resize:none;
+    -moz-resize:none;
+    resize:none;
+}
 
 .heading, .heading th, .heading td
 {

@@ -29,7 +29,7 @@
   </div>
   <div id="tabBasicInfo">
 	<table>
-		<tr><th>Character Level</th><td><input type="number" id="characterLevel" min="1" max="30" value="1" /></td><td class="help" colspan="2">The total number of levels this character possesses. Typically 1 for new characters.</td></tr>
+		<tr><th>Character Level</th><td><input type="number" id="characterLevel" min="1" max="30" value="1" /></td><td class="help" colspan="2">A measure of power. Leave at 1 for a new character.</td></tr>
 		<tr><th>Character Name</th><td><input type="text" id="characterName" /></td><td class="help" colspan="2">The name of this character</td></tr>
 		<tr><th>Player Name</th><td><input type="text" id="playerName" /></td><td class="help" colspan="2">The name of the player who uses this character</td></tr>
 		<tr><th>Alignment</th>
@@ -45,8 +45,8 @@
 					<option value="NE">Neutral Evil</option>
 					<option value="CE">Chaotic Evil</option>
 				</select>
-			</td><td class="help" colspan="2">See the PRD page on <a href="http://paizo.com/pathfinderRPG/prd/ultimateCampaign/campaignSystems/alignment.html">Alignment</a></td></tr>
-		<tr><th>Race</th><td><select id="race"></select></td><td class="help" colspan="2">See the PRD page on <a href="http://paizo.com/prd/races.html">Races</a></td></tr>
+			</td><td class="help" colspan="2">See the PRD page on <a href="#" help="http://paizo.com/pathfinderRPG/prd/ultimateCampaign/campaignSystems/alignment.html">Alignment</a></td></tr>
+		<tr><th>Race</th><td><select id="race"></select></td><td class="help" colspan="2">See the PRD page on <a href="#" help="http://paizo.com/prd/races.html">Races</a></td></tr>
 		<tr><th>Size</th><td><select id="size"></select></td><td class="help" colspan="2">Almost always determined by your race</td></tr>
 		<tr><td colspan="4" class="help spacer">The fields below help define your character, but they don't affect its mechanics.</td></tr>
 		<tr><th>Deity</th><td><input type="text" id="deity" /></td><th>Homeland</th><td><input type="text" id="homeland" /></td></tr>
@@ -81,6 +81,11 @@
   </div>
 </div>
 
+<div id="helpPopup">
+	<div id="helpLeftBlock"></div>
+	<iframe id="helpIframe" src=""></iframe>
+	<a href="#" target="_blank" class="help" id="helpLink">visit this page in a new tab</a>
+</div>
 
 </div>
 

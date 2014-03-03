@@ -68,6 +68,31 @@ $(function() {
 		var val = $(this).val();
 		$('#' + $(this).attr('id') + 'Out').val(val);
 	}).change();
+	
+	$("#helpPopup").dialog({
+    autoOpen: false,
+    modal: true,
+	width: 600,
+    height: 600,
+	title: "From the paizo.com Pathfinder PRD",
+	open: function(){
+		$('.ui-widget-overlay').bind('click',function(){
+			$('#helpPopup').dialog('close');
+		})
+	},
+    close: function(ev, ui) {
+             $('#helpIframe').attr('src','');
+			 $('#helpLink').attr('href','#');
+          }
+	});
+	
+	$('.help a').click(function() {
+		var url = $(this).attr('help');
+		$('#helpIframe').attr('src', url);
+		$('#helpLink').attr('href', url);
+		$('#helpPopup').dialog("open");
+		return false;
+	});
 });
 
 var SelectedRace = null;
