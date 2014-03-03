@@ -50,6 +50,11 @@ elements on the screen layout only
 	color:#333
 }
 
+.emphasis
+{
+	font-weight:bold;
+}
+
 .help.spacer
 {
 	padding: 15px 0 5px 0;

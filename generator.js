@@ -10,7 +10,7 @@ $(function() {
 	output = ''; var out2 = ''
 	for (var i=0;i<Abilities.length;i++){
 		var ab = Abilities[i];
-		output += '<tr><td class="right">' + ab.name + ':</td><td><input class="ability base" type="number" min="1" max="30" id="txtBase' + ab.abbrev + '" value="10"></td><td class="center"><span id="racialMod' + ab.abbrev + '">+0</span> <input type="radio" class="ability racial" name="abRacial" num="' + i + '" value="' + ab.abbrev + '"></td><td class="minLevel" level="4"><input type="radio" class="ability" name="ab4" value="' + ab.abbrev + '"></td><td class="minLevel" level="8"><input type="radio" class="ability" name="ab8" value="' + ab.abbrev + '"></td><td class="minLevel" level="12"><input type="radio" class="ability" name="ab12" value="' + ab.abbrev + '"></td><td class="minLevel" level="16"><input type="radio" class="ability" name="ab16" value="' + ab.abbrev + '"></td><td class="minLevel" level="20"><input type="radio" class="ability" name="ab20" value="' + ab.abbrev + '"></td><td id="abTotal' + ab.abbrev + '" class="center">10</td><td id="abModifier' + ab.abbrev + '" class="center">+0</td></tr>';
+		output += '<tr><td class="right">' + ab.name + ':</td><td><input class="ability base" type="number" min="3" max="18" id="txtBase' + ab.abbrev + '" value="10"></td><td class="center"><span id="racialMod' + ab.abbrev + '">+0</span> <input type="radio" class="ability racial" name="abRacial" num="' + i + '" value="' + ab.abbrev + '"></td><td class="minLevel" level="4"><input type="radio" class="ability" name="ab4" value="' + ab.abbrev + '"></td><td class="minLevel" level="8"><input type="radio" class="ability" name="ab8" value="' + ab.abbrev + '"></td><td class="minLevel" level="12"><input type="radio" class="ability" name="ab12" value="' + ab.abbrev + '"></td><td class="minLevel" level="16"><input type="radio" class="ability" name="ab16" value="' + ab.abbrev + '"></td><td class="minLevel" level="20"><input type="radio" class="ability" name="ab20" value="' + ab.abbrev + '"></td><td id="abTotal' + ab.abbrev + '" class="center">10</td><td id="abModifier' + ab.abbrev + '" class="center emphasis">+0</td></tr>';
 		
 		out2 += '<tr><td class="black"><div class="big">' + ab.abbrev + '</div><div class="subheading">' + ab.name + '</div></td><td class="box" id="score' + ab.abbrev + '"></td><td class="box" id="modifier' + ab.abbrev + '"></td><td class="box" id="tempAdjustment' + ab.abbrev + '"></td><td class="box" id="tempModifier' + ab.abbrev + '"></td></tr>'
 	}
@@ -99,8 +99,6 @@ var SelectedRace = null;
 
 var Abilities_SelectableRacial = [0, 0, 0, 0, 0, 0];
 var Abilities_Racial = [0, 0, 0, 0, 0, 0];
-var Abilities_Total = [10, 10, 10, 10, 10, 10];
-var Abilities_Modifiers = [0, 0, 0, 0, 0, 0];
 
 function AddSign(num)
 {
