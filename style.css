@@ -94,9 +94,9 @@ td#toolbar .ui-widget-header
 	text-align:right;
 }
 
-#tabAbilities input[type=number]
+input.number
 {
-	width: 50px;
+	width: 30px;
 	text-align:right;
 }
 
