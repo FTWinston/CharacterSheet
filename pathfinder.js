@@ -180,3 +180,27 @@ new Skill("Survival", wisdom, false, false, "http://paizo.com/pathfinderRPG/prd/
 new Skill("Swim", strength, false, false, "http://paizo.com/pathfinderRPG/prd/skills/swim.html"),
 new Skill("Use Magic Device", charisma, true, false, "http://paizo.com/pathfinderRPG/prd/skills/useMagicDevice.html")
 ];
+
+var Class = Base.extend({
+  constructor: function(name, skillPerLevel) {
+    this.name = name;
+	this.skillPerLevel = skillPerLevel;
+  },
+  
+  name: "",
+  skillPerLevel: 0
+});
+
+var barbarian = new Class("Barbarian", 4);
+var bard = new Class("Bard", 6);
+var cleric = new Class("Cleric", 2);
+var druid = new Class("Druid", 4);
+var fighter = new Class("Fighter", 2);
+var monk = new Class("Monk", 4);
+var paladin = new Class("Paladin", 2);
+var ranger = new Class("Ranger", 6);
+var rogue = new Class("Rogue", 8);
+var sorcerer = new Class("Sorcerer", 2);
+var wizard = new Class("Wizard", 2);
+
+var Classes = [barbarian, bard, cleric, druid, fighter, monk, paladin, ranger, rogue, sorcerer, wizard];

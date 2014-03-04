@@ -7,6 +7,35 @@ elements on the screen layout only
 
 */
 
+table.root
+{
+	width:100%;
+}
+
+td#tabs
+{
+	vertical-align:top;
+}
+
+td#toolbar
+{
+	width: 180px;
+	vertical-align:top;
+	padding: 3px;
+}
+
+td#toolbar .ui-widget-header
+{
+	padding: 4px 4px 4px 10px;
+}
+
+.save
+{
+	width:130px;
+	margin-bottom: 8px;
+	margin-left: 8px;
+}
+
 #helpPopup
 {
 	text-align:center;

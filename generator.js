@@ -1,5 +1,11 @@
 $(function() {
 	$('#tabs').tabs();
+	$('#saveLong').button().click(function() { save(false); });
+	
+	if ( window.location.href.substr(0, 4) == 'file' )
+		$('.tiny').toggle();
+	else
+		$('#saveTiny').button().click(function() { save(true); });
 	
 	var output = '';
 	for (var i=0;i<Sizes.length;i++){
@@ -10,7 +16,7 @@ $(function() {
 	output = ''; var out2 = ''
 	for (var i=0;i<Abilities.length;i++){
 		var ab = Abilities[i];
-		output += '<tr><td class="right">' + ab.name + ':</td><td><input class="ability base" type="number" min="3" max="18" id="txtBase' + ab.abbrev + '" value="10"></td><td class="center"><span id="racialMod' + ab.abbrev + '">+0</span> <input type="radio" class="ability racial" name="abRacial" num="' + i + '" value="' + ab.abbrev + '"></td><td class="minLevel" level="4"><input type="radio" class="ability" name="ab4" value="' + ab.abbrev + '"></td><td class="minLevel" level="8"><input type="radio" class="ability" name="ab8" value="' + ab.abbrev + '"></td><td class="minLevel" level="12"><input type="radio" class="ability" name="ab12" value="' + ab.abbrev + '"></td><td class="minLevel" level="16"><input type="radio" class="ability" name="ab16" value="' + ab.abbrev + '"></td><td class="minLevel" level="20"><input type="radio" class="ability" name="ab20" value="' + ab.abbrev + '"></td><td id="abTotal' + ab.abbrev + '" class="center">10</td><td id="abModifier' + ab.abbrev + '" class="center emphasis">+0</td></tr>';
+		output += '<tr><td class="right">' + ab.name + ':</td><td><input class="ability base" type="number" min="3" max="18" id="base' + ab.abbrev + '" value="10"></td><td class="center"><span id="racialMod' + ab.abbrev + '">+0</span> <input type="radio" class="ability racial" name="abRacial" num="' + i + '" value="' + ab.abbrev + '"></td><td class="minLevel" level="4"><input type="radio" class="ability" name="ab4" value="' + ab.abbrev + '"></td><td class="minLevel" level="8"><input type="radio" class="ability" name="ab8" value="' + ab.abbrev + '"></td><td class="minLevel" level="12"><input type="radio" class="ability" name="ab12" value="' + ab.abbrev + '"></td><td class="minLevel" level="16"><input type="radio" class="ability" name="ab16" value="' + ab.abbrev + '"></td><td class="minLevel" level="20"><input type="radio" class="ability" name="ab20" value="' + ab.abbrev + '"></td><td id="abTotal' + ab.abbrev + '" class="center">10</td><td id="abModifier' + ab.abbrev + '" class="center emphasis">+0</td></tr>';
 		
 		out2 += '<tr><td class="black"><div class="big">' + ab.abbrev + '</div><div class="subheading">' + ab.name + '</div></td><td class="box" id="score' + ab.abbrev + '"></td><td class="box" id="modifier' + ab.abbrev + '"></td><td class="box" id="tempAdjustment' + ab.abbrev + '"></td><td class="box" id="tempModifier' + ab.abbrev + '"></td></tr>'
 	}
@@ -51,8 +57,7 @@ $(function() {
 			}
 			SelectedRace = newRace;
 			CalculateAbilities();
-		})
-		.change();
+		});
 	
 	$('#characterLevel').change(function() {
 		var level = $(this).val();
@@ -62,12 +67,12 @@ $(function() {
 			else
 				$(this).show();
 		});
-	}).change();
+	});
 	
 	$('#tabBasicInfo input, #tabBasicInfo select').change(function() {
 		var val = $(this).val();
 		$('#' + $(this).attr('id') + 'Out').val(val);
-	}).change();
+	});
 	
 	$("#helpPopup").dialog({
     autoOpen: false,
@@ -93,6 +98,9 @@ $(function() {
 		$('#helpPopup').dialog("open");
 		return false;
 	});
+	
+	load();
+	$('#race, #characterLevel, #tabBasicInfo input, #tabBasicInfo select, .ability.racial:checked').change();
 });
 
 var SelectedRace = null;
@@ -123,7 +131,7 @@ function CalculateAbilities()
 	{
 		var abbrev = Abilities[i].abbrev;
 	
-		var base = Number($('#txtBase' + abbrev).val());
+		var base = Number($('#base' + abbrev).val());
 		totalSpend += base - 10;
 		var racial =  Abilities_Racial[i];
 		var tot = base + racial;
@@ -143,4 +151,99 @@ function CalculateAbilities()
 	}
 	
 	$('#abTotalSpend').text(totalSpend);
+}
+
+function save(tinyURL)
+{
+	var url = window.location.href;	
+	var snip = url.indexOf('?');
+	if ( snip != -1 )
+		url = url.substr(0, snip);
+	
+	var first = true;
+	
+	// all non-radio inputs, we just get the id & value of each
+	$('#tabs input, #tabs select').not('input[type="radio"]').each(function() {
+		var id = $(this).attr('id');
+		if ( id == undefined )
+			return;
+		
+		var val = $(this).val();
+		if ( val == undefined || val == '' )
+			return;
+		
+		if ( first )
+		{
+			url += '?';
+			first = false;
+		}
+		else
+			url += '&';
+		url += id + '=' + val;
+	});
+	
+	// but for radios, where each one doesn't have an ID, we just get the name & value of selected ones
+	$('#tabs input[type="radio"]:checked').each(function() {
+		var id = $(this).attr('name');
+		if ( id == undefined )
+			return;
+		
+		var val = $(this).val();
+		if ( val == undefined || val == '' )
+			return;
+		
+		if ( first )
+		{
+			url += '?';
+			first = false;
+		}
+		else
+			url += '&';
+		url += id + '=' + val;
+	});
+	
+	if ( tinyURL )
+	{
+		$.getJSON('http://api.bitly.com/v3/shorten?callback=?',
+			{
+				format: "json",
+				apiKey: 'R_75f07b980f6e468abbcef71124e1614e',
+				login: 'charactersheet',
+				longUrl: url
+			},
+			function(response) {
+				if ( response.data.url == null )
+					console.log("bit.ly doesn't like this url");
+				else
+					url = response.data.url;
+				$('#savedLink').html('Saved link: <a href="' + url + '">' + url + '</a>');
+			}
+		);
+	}
+	else
+	{
+		$('#savedLink').html('Saved link: <a href="' + url + '">' + url + '</a>');
+	}
+}
+
+function load()
+{
+	// read all the query parameters
+	var getVars = {};
+	if (window.location.search.length > 1) {
+	  for (var aItKey, nKeyId = 0, aCouples = window.location.search.substr(1).split('&'); nKeyId < aCouples.length; nKeyId++) {
+		aItKey = aCouples[nKeyId].split('=');
+		getVars[decodeURIComponent(aItKey[0])] = aItKey.length > 1 ? decodeURIComponent(aItKey[1]) : '';
+	  }
+	}
+	
+	// taking each one as an element id, apply the value
+	for (element in getVars)
+	{
+		var elemByID = $('#' + element);
+		if ( elemByID.length > 0 )
+			elemByID.val(getVars[element]);
+		else // see if this was a radio, which are done differently
+			$('#tabs input[type="radio"][name="' + element + '"][value="' + getVars[element] + '"]').prop('checked', true);
+	}
 }
