@@ -154,7 +154,7 @@ th { font-weight: normal; }
 #printOnly .basicInfo label { color:#666; }
 #characterNameOut, #playerNameOut { width: 200px; }
 #alignmentOut { width: 60px; }
-#characterLevelOut { width: 270px; }
+#classLevelsOut { width: 270px; }
 #deityOut { width: 90px; }
 #homelandOut { width: 75px; }
 #raceOut { width: 95px; }

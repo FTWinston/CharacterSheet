@@ -241,6 +241,7 @@ function checkLevels(tryPutAllAllFavored)
 	}
 	
 	// show/hide feature selection for chosen classes
+	var classLevels = [];
 	$('.feature').hide();
 	$('.levels').each(function() {
 		var level = $(this).val();
@@ -249,7 +250,10 @@ function checkLevels(tryPutAllAllFavored)
 		var classname = $(this).attr('id').substr(6);
 		$('.feature.' + classname + ' .level').text(level);
 		$('.feature.' + classname).show();
-	})
+		
+		classLevels.push('Lvl ' + level + ' ' + classname);
+	});
+	$('#classLevelsOut').val(classLevels.join(', '));
 }
 
 function calculateAbilities()
