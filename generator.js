@@ -78,7 +78,7 @@ $(function() {
 	
 	$('#multiclass')
 		.change(function() { if ( $(this).prop('checked') ) $('.multiclass').show(); else $('.multiclass').hide(); })
-		.closest('tr').after(out2);
+		.closest('tr').next().after(out2);
 	
 	$('#characterLevel').change(function() {
 		var level = $(this).val();
@@ -88,8 +88,18 @@ $(function() {
 			else
 				$(this).show();
 		});
-		$('.levels, .bonus').attr('max', level.toString()).spinner({ max: level });
+		$('.levels').attr('max', level.toString()).spinner({ max: level });
 		checkLevels(true);
+
+		if ( level == 1 ) {
+			$('.levelSingle').show();
+			$('.levelPlural').hide();
+		}
+		else {
+			$('.levelSingle').hide();
+			$('.levelPlural').show();
+		}
+		$('.numLevels').text(level);
 	});
 	
 	$('.levels').change(function() {
@@ -115,10 +125,12 @@ $(function() {
 		var sum = Number(other.val()) + Number($(this).val());
 		var limit = Number($('#favoredClassLevels').text());
 		
-		if ( sum <= limit )
-			return;
-		
-		other.val(other.val() - 1);
+		if ( sum > limit )
+		{
+			other.val(other.val() - 1);
+			sum--;
+		}
+		$('#bonusUnallocated').text(limit - sum);
 	});
 	
 	$('input.number').spinner();
@@ -173,15 +185,47 @@ function addSign(num)
 
 function checkLevels(tryPutAllAllFavored)
 {
+	var totLevel = $('#characterLevel').val();
 	var favoredSel = '#levels' + $('#favoredClass').val();
 	// if not multiclassing, changing class/level puts all points into your favored class
 	if ( tryPutAllAllFavored && $('.levels').filter(function () { return $(this).val() > 0; }).length < 2 ) {
 		$('.levels').val(0);
-		$(favoredSel).val($('#characterLevel').val());
+		$(favoredSel).val(totLevel);
 	}
 	
 	var levels = $(favoredSel).val();
 	$('#favoredClassLevels').text(levels);
+	$('.bonus').attr('max', levels).spinner({ max: Number(levels) });
+	
+	// count unallocated levels
+	var totAllocated = 0;
+	$('.levels').each(function() {
+        totAllocated += Number($(this).val());
+    });
+	$('#levelsUnallocated').text(totLevel - totAllocated);
+	
+	// check that the total number of bonus points isn't too high
+	var hp = $('#bonusHP').val(); var sp = $('#bonusSP').val();
+	if ( hp + sp > levels )
+	{
+		var reduce = hp + sp - levels;
+		if ( hp >= reduce )
+		{
+			hp -= reduce;
+			$('#bonusHP').val(hp);
+		}
+		else
+		{
+			hp = 0;
+			sp = levels
+			$('#bonusHP').val(hp);
+			$('#bonusSP').val(sp);
+		}
+	}
+	
+	// report unallocated bonus points
+	$('#bonusUnallocated').text(levels - hp - sp);
+	
 	if ( Number(levels) == 1 ) {
 		$('.favoredSingle').show();
 		$('.favoredPlural').hide();
