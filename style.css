@@ -89,7 +89,7 @@ td#toolbar .ui-widget-header
 	padding: 15px 0 5px 0;
 }
 
-#tabBasicInfo th
+#tabBasicInfo th, #tabClasses th
 {
 	text-align:right;
 }
@@ -99,7 +99,6 @@ input.number
 	width: 30px;
 	text-align:right;
 }
-
 
 /*
 

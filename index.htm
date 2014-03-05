@@ -19,7 +19,7 @@
 <table id="root">
 <tr>
 <td id="toolbar" class="ui-widget-content ui-corner-all">
-<div class="ui-widget-header ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title">Settings</span></div>
+<div class="ui-widget-header ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title">Save your character</span></div>
 <div style="width: auto; min-height: 0px; max-height: none;">
 	<p>To save a link to this character sheet, click a button below.</p>
 	
@@ -35,6 +35,7 @@
     <li><a href="#tabIntro">Intro</a></li>
     <li><a href="#tabBasicInfo">Basics</a></li>
     <li><a href="#tabAbilities">Abilities</a></li>
+	<li><a href="#tabClasses">Classes</a></li>
 	<li><a href="#tabSkills">Skills</a></li>
   </ul>
 
@@ -94,9 +95,20 @@
 		</tr>
 	</table>
   </div>
+  <div id="tabClasses">
+	<p>Select your favored class. If you wish to multi-class, check the box below, and you can acquire levels in other classes.<br/>Once you've finished selecting, you can then select options specific to your chosen class(es).</p>
+	<table>
+		<tr><th>Favored Class</th><td><select id="favoredClass"></select></td><td class="help"> Class descriptions are available <a href="#" help="http://paizo.com/pathfinderRPG/prd/classes.html">on the PRD</a></td></tr>
+		<tr><th><label for="multiclass">Multi-Class</label></th><td><input type="checkbox" id="multiclass" /></td><td class="help">To <a href="#" help="http://paizo.com/pathfinderRPG/prd/classes.html#multiclassing">multi-class</a>, check this box</td></tr>
+		
+		<tr><td colspan="3" class="help spacer">You have <span id="favoredClassLevels">0</span> level<span class="favoredPlural">s</span> in your favored class. <span class="favoredPlural">These</span><span class="favoredSingle" style="display:none">This</span> grant you either <span class="favoredSingle">an </span>extra hitpoint<span class="favoredPlural">s</span> or <span class="favoredSingle">an </span>extra skill point<span class="favoredPlural">s</span>.</td></tr>
+		
+		<tr><th>Hitpoints</th><td><input class="number bonus" type="text" min="0" max="30" id="bonusHP" value="0" /> extra</td><td class="help"></td></tr>
+		<tr><th>Skill Points</th><td><input class="number bonus" type="text" min="0" max="30" id="bonusSP" value="0" /> extra</td><td class="help"></td></tr>
+	</table>
+  </div>
   <div id="tabSkills">
-	<p>Allocate ranks to any skills listed. You have allocated <span id="skillRanksAllocated">0 / 0</span> ranks.</p>
-	
+	<p>Allocate ranks to any skills listed. You have allocated <span id="skillRanksAllocated">0</span> / <span id="skillRanksTot">0</span> ranks.</p>
   </div>
 </td>
 </tr>
