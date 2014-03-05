@@ -58,11 +58,13 @@ $(function() {
 			calculateAbilities();
 		});
 	
-	output = ''; out2 = ''
+	output = ''; out2 = ''; out3 = ''
 	for (var i=0;i<Classes.length;i++){
 		var name = Classes[i].name;
 		output += '<option value="' + name + '">' + name + '</option>';
 		out2 += '<tr class="multiclass" style="display:none;"><th>' + name + '</th><td><input class="number levels" type="text" min="0" max="30" id="levels' + name + '" value="0" /> levels</td><td class="help"></td></tr>';
+		//out3 += '<tr class="feature ' + name + '" style="display:none;"><td>Not yet implemented</td></tr>';
+		out3 += '<h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top feature ' + name + '" style="display:none;">' + name + ' - level <span class="level">1</span></h3><div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom feature ' + name + '" style="display:none;">Not yet implemented</div>';
 	}
 	$('#favoredClass')
 		.append(output)
@@ -79,6 +81,9 @@ $(function() {
 	$('#multiclass')
 		.change(function() { if ( $(this).prop('checked') ) $('.multiclass').show(); else $('.multiclass').hide(); })
 		.closest('tr').next().after(out2);
+	
+	$('#tabFeatures').append(out3);
+	output = ''; out2 = ''; out3 = '';
 	
 	$('#characterLevel').change(function() {
 		var level = $(this).val();
@@ -234,6 +239,17 @@ function checkLevels(tryPutAllAllFavored)
 		$('.favoredSingle').hide();
 		$('.favoredPlural').show();
 	}
+	
+	// show/hide feature selection for chosen classes
+	$('.feature').hide();
+	$('.levels').each(function() {
+		var level = $(this).val();
+		if ( level <= 0 )
+			return;
+		var classname = $(this).attr('id').substr(6);
+		$('.feature.' + classname + ' .level').text(level);
+		$('.feature.' + classname).show();
+	})
 }
 
 function calculateAbilities()

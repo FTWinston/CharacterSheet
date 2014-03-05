@@ -15,6 +15,7 @@ table.root
 td#tabs
 {
 	vertical-align:top;
+	width:910px;
 }
 
 td#toolbar
@@ -98,6 +99,16 @@ input.number
 {
 	width: 30px;
 	text-align:right;
+}
+
+.feature.ui-accordion-content
+{
+	margin-bottom: 12px;
+}
+
+.ui-accordion .feature.ui-accordion-header
+{
+	cursor:auto;
 }
 
 /*
