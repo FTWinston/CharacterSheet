@@ -18,6 +18,12 @@ td#tabs
 	width:910px;
 }
 
+td#tabs .ui-tabs-anchor
+{
+	font-size:14px;
+	font-weight:bold;
+}
+
 td#toolbar
 {
 	width: 180px;

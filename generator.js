@@ -63,8 +63,7 @@ $(function() {
 		var name = Classes[i].name;
 		output += '<option value="' + name + '">' + name + '</option>';
 		out2 += '<tr class="multiclass" style="display:none;"><th>' + name + '</th><td><input class="number levels" type="text" min="0" max="30" id="levels' + name + '" value="0" /> levels</td><td class="help"></td></tr>';
-		//out3 += '<tr class="feature ' + name + '" style="display:none;"><td>Not yet implemented</td></tr>';
-		out3 += '<h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top feature ' + name + '" style="display:none;">' + name + ' - level <span class="level">1</span></h3><div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom feature ' + name + '" style="display:none;">Not yet implemented</div>';
+		out3 += '<h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top feature ' + name + '" style="display:none;"><span class="heading">' + name + '</span> - level <span class="level">1</span></h3><div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom feature ' + name + '" style="display:none;">Not yet implemented</div>';
 	}
 	$('#favoredClass')
 		.append(output)
