@@ -1,5 +1,38 @@
 $(function() {
 	$('#tabs').tabs();
+	
+	$(".ui-tabs-panel").each(function(i) {
+		var output = '<div id="nav">';
+		if (i != 0)
+			output += '<a class="lnkPrevTab" href="#">&#171; Prev</a>  ';
+		else
+			output += '<a class="lnkPrevTab" href="#" style="visibility:hidden;">&#171; Prev</a>  ';
+		
+		var lastTab = $(".ui-tabs-panel").size() - 1;
+		if (i != lastTab)
+			output += '<a class="lnkNextTab" href="#">Next &#187;</a>';
+		else
+			output += '<a class="lnkNextTab" href="#" style="visibility:hidden;">Next &#187;</a>';
+		
+		output += '</div>';
+		$(this).append(output);
+	});
+	
+	$('.lnkPrevTab').click(function() {
+		var i = $('#tabs').tabs( "option", "active") - 1;
+		if ( i < 0 ) i = 0;
+		$('#tabs').tabs( "option", "active", i );
+		return false;
+	})
+	
+	$('.lnkNextTab').click(function() {
+		var i = $('#tabs').tabs( "option", "active") + 1;
+		//if ( i > 9 ) i = 9;
+		$('#tabs').tabs( "option", "active", i );
+		return false;
+	})
+	
+	
 	$('#saveLong').button().click(function() { save(false); });
 	
 	if ( window.location.href.substr(0, 4) == 'file' )

@@ -18,6 +18,18 @@ td#tabs
 	width:910px;
 }
 
+.ui-tabs-panel
+{
+	position:relative;
+}
+
+#nav
+{
+	position:absolute;
+	top: 9px;
+	left: 20px;
+}
+
 td#tabs .ui-tabs-anchor
 {
 	font-size:14px;
