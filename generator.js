@@ -49,8 +49,8 @@ $(function() {
 	output = ''; var out2 = ''
 	for (var i=0;i<Abilities.length;i++){
 		var ab = Abilities[i];
-		output += '<tr><td class="right">' + ab.name + ':</td><td><input class="ability base number" type="text" min="3" max="30" id="base' + ab.abbrev + '" value="10" /></td><td class="center"><span id="racialMod' + ab.abbrev + '">+0</span> <input type="radio" class="ability racial" name="abRacial" num="' + i + '" value="' + ab.abbrev + '" /></td><td class="minLevel" level="4"><input type="radio" class="ability" name="ab4" value="' + ab.abbrev + '" /></td><td class="minLevel" level="8"><input type="radio" class="ability" name="ab8" value="' + ab.abbrev + '" /></td><td class="minLevel" level="12"><input type="radio" class="ability" name="ab12" value="' + ab.abbrev + '" /></td><td class="minLevel" level="16"><input type="radio" class="ability" name="ab16" value="' + ab.abbrev + '" /></td><td class="minLevel" level="20"><input type="radio" class="ability" name="ab20" value="' + ab.abbrev + '" /></td><td id="abTotal' + ab.abbrev + '" class="center">10</td><td id="abModifier' + ab.abbrev + '" class="center emphasis">+0</td></tr>';
-		out2 += '<tr><td class="black"><div class="big">' + ab.abbrev + '</div><div class="subheading">' + ab.name + '</div></td><td class="box" id="score' + ab.abbrev + '"></td><td class="box" id="modifier' + ab.abbrev + '"></td><td class="box" id="tempAdjustment' + ab.abbrev + '"></td><td class="box" id="tempModifier' + ab.abbrev + '"></td></tr>'
+		output += '<tr><td class="right">' + ab.name + ':</td><td><input class="ability base number" type="text" min="3" max="30" id="base' + ab.abbrev + '" value="10" /></td><td class="center"><span id="racialMod' + ab.abbrev + '">+0</span> <input type="radio" class="ability racial" name="abRacial" num="' + i + '" value="' + ab.abbrev + '" /></td><td class="minLevel" level="4"><input type="radio" class="ability" name="ab4" value="' + ab.abbrev + '" /></td><td class="minLevel" level="8"><input type="radio" class="ability" name="ab8" value="' + ab.abbrev + '" /></td><td class="minLevel" level="12"><input type="radio" class="ability" name="ab12" value="' + ab.abbrev + '" /></td><td class="minLevel" level="16"><input type="radio" class="ability" name="ab16" value="' + ab.abbrev + '" /></td><td class="minLevel" level="20"><input type="radio" class="ability" name="ab20" value="' + ab.abbrev + '" /></td><td id="abTotal' + ab.abbrev + '" class="center">10</td><td class="center emphasis abModifier' + ab.abbrev + '">+0</td></tr>';
+		out2 += '<tr><td class="black"><div class="big">' + ab.abbrev + '</div><div class="subheading">' + ab.name + '</div></td><td class="box" id="score' + ab.abbrev + '"></td><td class="box abModifier' + ab.abbrev + '"></td><td class="box" id="tempAdjustment' + ab.abbrev + '"></td><td class="box" id="tempModifier' + ab.abbrev + '"></td></tr>'
 	}
 	$('#abilityTableLastRow').before(output);
 	$('#outAbilityTable').append(out2);
@@ -170,7 +170,21 @@ $(function() {
 		$('#bonusUnallocated').text(limit - sum);
 	});
 	
-	$('input.number').spinner();
+	output = '';
+	for (var i=0;i<Skills.length;i++){
+		var skill = Skills[i];
+		output += '<tr><td><input type="checkbox" class="cs' + skill.name + ' classSkill" disabled="disabled" /></td><td>' + skill.displayName;
+		if ( skill.trainedOnly )
+			output += '<sup>*</sup>';
+		output += '</td><td class="right"><span class="skillTot' + skill.name + ' emphasis">0</span>&nbsp;=</td><td><input type="text" class="number skillRanks" id="skillRanks' + skill.name + '" value="0" min="0" /></td><td class="right abModifier' + skill.ability.abbrev + '"></td><td class="small">(' + skill.ability.abbrev + ')</td><td><span class="trained" style="display:none;">+3 <span class="small">(class)</span></span></td></tr>';
+	}
+	$('#tabSkills table:first').append(output);
+	
+	$('input.skillRanks').change(function() {
+		calculateSkill($(this).closest('tr').index() - 1);
+	});
+	
+	$('input.number:not([readonly])').spinner();
 	$('.ui-spinner-button').click(function() {
 	   $(this).siblings('input').change();
 	});
@@ -204,6 +218,8 @@ $(function() {
 		$('#helpPopup').dialog("open");
 		return false;
 	});
+	
+	$('#printOnly input').prop("readonly", true);
 	
 	load();
 	$('#race, #characterLevel, #tabBasicInfo input, #tabBasicInfo select, .ability.racial:checked, #favoredClass, #multiclass').change();
@@ -272,6 +288,12 @@ function checkLevels(tryPutAllAllFavored)
 		$('.favoredPlural').show();
 	}
 	
+	// class skills will have changed. To recalculate, first clear them all
+	$('.classSkill').prop('checked', false);
+	for (var i=0;i<Skills.length;i++) {
+		Skills[i].isClassSkill = false;
+	}
+	
 	// show/hide feature selection for chosen classes
 	var classLevels = [];
 	$('.feature').hide();
@@ -284,8 +306,22 @@ function checkLevels(tryPutAllAllFavored)
 		$('.feature.' + classname).show();
 		
 		classLevels.push('Lvl ' + level + ' ' + classname);
+		
+		// update which skills are class skills	
+		var thisClass = Classes[$(this).closest('tr').index() - 3];
+		var skills = thisClass.classSkills;
+		
+		console.log(thisClass.name + ' has ' + skills.length + ' class skills');
+		
+		for (var i=0;i<skills.length;i++) {
+			$('input.cs' + skills[i].name).prop('checked', true);
+			skills[i].isClassSkill = true;
+		}
 	});
 	$('#classLevelsOut').val(classLevels.join(', '));
+	
+	// if class skills changed, need to recalculate skills
+	calculateSkills();
 }
 
 function calculateAbilities()
@@ -293,11 +329,11 @@ function calculateAbilities()
 	var totalSpend = 0;
 	
 	var levelIncreases = [
-		$( "input:radio[name=ab4]:checked" ).val(),
-		$( "input:radio[name=ab8]:checked" ).val(),
-		$( "input:radio[name=ab12]:checked" ).val(),
-		$( "input:radio[name=ab16]:checked" ).val(),
-		$( "input:radio[name=ab20]:checked" ).val()
+		$('input:radio[name=ab4]:checked').val(),
+		$('input:radio[name=ab8]:checked').val(),
+		$('input:radio[name=ab12]:checked').val(),
+		$('input:radio[name=ab16]:checked').val(),
+		$('input:radio[name=ab20]:checked').val()
 	];
 	
 	for (var i=0; i<Abilities.length; i++)
@@ -326,10 +362,25 @@ function calculateAbilities()
 		$('#racialMod' + abbrev).text(addSign(racial));
 		
 		$('#abTotal' + abbrev + ', #score' + abbrev).text(tot);
-		$('#abModifier' + abbrev + ', #modifier' + abbrev).text(addSign(mod));
+		$('.abModifier' + abbrev).text(addSign(mod));
 	}
 	
 	$('#abTotalSpend').text(totalSpend);
+	calculateSkills();
+}
+
+function calculateSkills()
+{
+	for (var i=0;i<Skills.length;i++)
+		calculateSkill(i);
+}
+
+function calculateSkill(i)
+{
+	var skill = Skills[i]; 
+	skill.ranksTrained = Number($('#skillRanks' + skill.name).val());
+	$('.skillRanksOut' + skill.name).text(skill.ranksTrained);
+	$('.skillTot' + skill.name).text(skill.getTotal());
 }
 
 function save(tinyURL)
@@ -342,7 +393,7 @@ function save(tinyURL)
 	var first = true;
 	
 	// all non-radio/checkbox inputs, we just get the id & value of each
-	$('#tabs input, #tabs select').not('input[type="radio"], input[type="checkbox"]').each(function() {
+	$('#tabs input:not([readonly]), #tabs select').not('input[type="radio"], input[type="checkbox"]').each(function() {
 		var id = $(this).attr('id');
 		if ( id == undefined )
 			return;
@@ -362,7 +413,7 @@ function save(tinyURL)
 	});
 	
 	// and checkboxes, just the IDs
-	$('#tabs input[type="checkbox"]:checked').each(function() {
+	$('#tabs input[type="checkbox"]:checked:not([readonly])').each(function() {
 		var id = $(this).attr('id');
 		if ( id == undefined )
 			return;

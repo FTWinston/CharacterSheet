@@ -79,8 +79,9 @@ var Races = [];
 
 
 var Skill = Base.extend({
-  constructor: function(name, ability, trainedOnly, requiresCustom, helpLink) {
+  constructor: function(name, displayName, ability, trainedOnly, requiresCustom, helpLink) {
     this.name = name;
+	this.displayName = displayName;
 	this.ability = ability;
 	this.trainedOnly = trainedOnly;
 	this.requiresCustom = requiresCustom;
@@ -104,8 +105,8 @@ var Skill = Base.extend({
 	if ( this.trainedOnly && this.ranksTrained == 0 )
 		return "--";
   
-	var sum = Abilities_Modifiers[this.ability.index] + ranksTrained;
-	if ( isClassSkill && ranksTrained > 0 )
+	var sum = Abilities_Modifiers[this.ability.index] + this.ranksTrained;
+	if ( this.isClassSkill && this.ranksTrained > 0 )
 		sum += 3;
 	return sum;
   }
@@ -117,10 +118,12 @@ var Class = Base.extend({
   constructor: function(name, skillPerLevel) {
     this.name = name;
 	this.skillPerLevel = skillPerLevel;
+	this.classSkills = [];
   },
   
   name: "",
-  skillPerLevel: 0
+  skillPerLevel: 0,
+  classSkills: []
 });
 
 var Classes = [];
