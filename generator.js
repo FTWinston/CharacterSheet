@@ -184,11 +184,8 @@ $(function() {
 		calculateSkill($(this).closest('tr').index() - 1, true);
 	});
 	
-	$('input.number:not([readonly])').spinner();
-	$('.ui-spinner-button').click(function() {
-	   $(this).siblings('input').change();
-	});
-	
+	$('input.number:not([readonly])').spinner({ stop: function() { $(this).change(); }});
+
 	$('#tabBasicInfo input, #tabBasicInfo select').change(function() {
 		var val = $(this).val();
 		$('#' + $(this).attr('id') + 'Out').val(val);
