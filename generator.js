@@ -181,7 +181,7 @@ $(function() {
 	$('#tabSkills table:first').append(output);
 	
 	$('input.skillRanks').change(function() {
-		calculateSkill($(this).closest('tr').index() - 1);
+		calculateSkill($(this).closest('tr').index() - 1, true);
 	});
 	
 	$('input.number:not([readonly])').spinner();
@@ -311,8 +311,6 @@ function checkLevels(tryPutAllAllFavored)
 		var thisClass = Classes[$(this).closest('tr').index() - 3];
 		var skills = thisClass.classSkills;
 		
-		console.log(thisClass.name + ' has ' + skills.length + ' class skills');
-		
 		for (var i=0;i<skills.length;i++) {
 			$('input.cs' + skills[i].name).prop('checked', true);
 			skills[i].isClassSkill = true;
@@ -321,6 +319,7 @@ function checkLevels(tryPutAllAllFavored)
 	$('#classLevelsOut').val(classLevels.join(', '));
 	
 	// if class skills changed, need to recalculate skills
+	$('input.number.skillRanks').attr('max', totLevel.toString()).spinner({ max: totLevel });
 	calculateSkills();
 }
 
@@ -371,16 +370,41 @@ function calculateAbilities()
 
 function calculateSkills()
 {
+	var sum = 0;
 	for (var i=0;i<Skills.length;i++)
-		calculateSkill(i);
+	{
+		calculateSkill(i, false);
+		sum += Skills[i].ranksTrained;
+	}
+	
+	checkSkillTotal(sum, null);
 }
 
-function calculateSkill(i)
+function calculateSkill(i, updateTotal)
 {
 	var skill = Skills[i]; 
 	skill.ranksTrained = Number($('#skillRanks' + skill.name).val());
 	$('.skillRanksOut' + skill.name).text(skill.ranksTrained);
 	$('.skillTot' + skill.name).text(skill.getTotal());
+	
+	if ( updateTotal )
+	{
+		var sum = 0;
+		for (var i=0;i<Skills.length;i++)
+			sum += Skills[i].ranksTrained;
+		
+		checkSkillTotal(sum, i);
+	}
+}
+
+function checkSkillTotal(totalSpent, indexChanged)
+{
+	// check if this isn't larger than the limit.
+	// if it is, reduce entries (but not indexChanged)
+	
+	// if its still too big, then reduce indexChanged
+	
+	$('#skillRanksAllocated').text(totalSpent);
 }
 
 function save(tinyURL)
