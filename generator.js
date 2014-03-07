@@ -298,17 +298,20 @@ function checkLevels(tryPutAllAllFavored)
 	var classLevels = [];
 	$('.feature').hide();
 	$('.levels').each(function() {
-		var level = $(this).val();
+		var thisClass = Classes[$(this).closest('tr').index() - 3];
+		thisClass.level = $(this).val();
+		var level = thisClass.level;
+		
 		if ( level <= 0 )
 			return;
-		var classname = $(this).attr('id').substr(6);
+		
+		var classname = thisClass.name;
 		$('.feature.' + classname + ' .level').text(level);
 		$('.feature.' + classname).show();
 		
 		classLevels.push('Lvl ' + level + ' ' + classname);
 		
 		// update which skills are class skills	
-		var thisClass = Classes[$(this).closest('tr').index() - 3];
 		var skills = thisClass.classSkills;
 		
 		for (var i=0;i<skills.length;i++) {
@@ -354,14 +357,13 @@ function calculateAbilities()
 			if (levelIncreases[j] == abbrev)
 				tot += 2;
 		
-		Abilities_Total[i] = tot;
-		var mod = Math.floor((tot - 10)/2);
-		Abilities_Modifiers[i] = mod;
+		var ability = Abilities[i];
+		ability.setPoints(tot);
 		
 		$('#racialMod' + abbrev).text(addSign(racial));
 		
 		$('#abTotal' + abbrev + ', #score' + abbrev).text(tot);
-		$('.abModifier' + abbrev).text(addSign(mod));
+		$('.abModifier' + abbrev).text(addSign(ability.modifier));
 	}
 	
 	$('#abTotalSpend').text(totalSpend);

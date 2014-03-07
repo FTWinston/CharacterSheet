@@ -1,5 +1,3 @@
-// character sizes
-
 var Size = Base.extend({
   constructor: function(name, modifier) {
     this.name = name;
@@ -10,52 +8,29 @@ var Size = Base.extend({
   sizeModifier: 0
 });
 
-var Size_Fine = new Size("Fine", 8);
-var Size_Diminutive = new Size("Diminutive", 4);
-var Size_Tiny = new Size("Tiny", 2);
-var Size_Small = new Size("Small", 1);
-var Size_Medium = new Size("Medium", 0);
-var Size_Large = new Size("Large", -1);
-var Size_Huge = new Size("Huge", -2);
-var Size_Gargantuan = new Size("Gargantuan", -4);
-var Size_Colossal = new Size("Colossal", -8);
+var Sizes = [];
 
-var Sizes = [
-Size_Fine,
-Size_Diminutive,
-Size_Tiny,
-Size_Small,
-Size_Medium,
-Size_Large,
-Size_Huge,
-Size_Gargantuan,
-Size_Colossal
-];
-
-// abilities
 var Ability = Base.extend({
-  constructor: function(name, abbrev, index) {
+  constructor: function(name, abbrev) {
     this.name = name;
 	this.abbrev = abbrev;
-	this.index = index;
+	this.points = 10;
+	this.modifier = 0;
   },
   
   name: "",
   abbrev: "",
-  index: ""
+  points: 10,
+  modifier: 0,
+  
+  setPoints: function(tot)
+  {
+	this.points = tot;
+	this.modifier = Math.floor((tot - 10)/2);
+  }
 });
 
-var strength = new Ability("Strength", "STR", 0);
-var dexterity = new Ability("Dexterity", "DEX", 1);
-var constitution = new Ability("Constitution", "CON", 2);
-var intelligence = new Ability("Intelligence", "INT", 3);
-var wisdom = new Ability("Wisdom", "WIS", 4);
-var charisma = new Ability("Charisma", "CHA", 5);
-
-var Abilities = [strength, dexterity, constitution, intelligence, wisdom, charisma];
-
-var Abilities_Total = [10, 10, 10, 10, 10, 10];
-var Abilities_Modifiers = [0, 0, 0, 0, 0, 0];
+var Abilities = [];
 
 var Race = Base.extend({
   constructor: function(name, size, speed, abilities) {
@@ -66,7 +41,7 @@ var Race = Base.extend({
   },
   
   name: "",
-  size: Size_Medium,
+  size: null,
   speed: 30,
   abilities: null,
   
@@ -76,7 +51,6 @@ var Race = Base.extend({
 });
 
 var Races = [];
-
 
 var Skill = Base.extend({
   constructor: function(name, displayName, ability, trainedOnly, requiresCustom, helpLink) {
@@ -105,7 +79,7 @@ var Skill = Base.extend({
 	if ( this.trainedOnly && this.ranksTrained == 0 )
 		return "--";
   
-	var sum = Abilities_Modifiers[this.ability.index] + this.ranksTrained;
+	var sum = this.ability.modifier + this.ranksTrained;
 	if ( this.isClassSkill && this.ranksTrained > 0 )
 		sum += 3;
 	return sum;
@@ -119,11 +93,13 @@ var Class = Base.extend({
     this.name = name;
 	this.skillPerLevel = skillPerLevel;
 	this.classSkills = [];
+	this.level = 0;
   },
   
   name: "",
   skillPerLevel: 0,
-  classSkills: []
+  classSkills: [],
+  level: 0
 });
 
 var Classes = [];

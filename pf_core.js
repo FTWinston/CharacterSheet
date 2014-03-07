@@ -1,3 +1,27 @@
+var Size_Fine = new Size("Fine", 8);
+var Size_Diminutive = new Size("Diminutive", 4);
+var Size_Tiny = new Size("Tiny", 2);
+var Size_Small = new Size("Small", 1);
+var Size_Medium = new Size("Medium", 0);
+var Size_Large = new Size("Large", -1);
+var Size_Huge = new Size("Huge", -2);
+var Size_Gargantuan = new Size("Gargantuan", -4);
+var Size_Colossal = new Size("Colossal", -8);
+
+Sizes.push(Size_Fine, Size_Diminutive, Size_Tiny, Size_Small, Size_Medium, Size_Large, Size_Huge, Size_Gargantuan, Size_Colossal);
+
+// ---
+
+var strength = new Ability("Strength", "STR");
+var dexterity = new Ability("Dexterity", "DEX");
+var constitution = new Ability("Constitution", "CON");
+var intelligence = new Ability("Intelligence", "INT");
+var wisdom = new Ability("Wisdom", "WIS");
+var charisma = new Ability("Charisma", "CHA");
+Abilities.push(strength, dexterity, constitution, intelligence, wisdom, charisma);
+
+// ---
+
 var acrobatics = new Skill("Acrobatics", "Acrobatics", dexterity, false, false, "http://paizo.com/pathfinderRPG/prd/skills/acrobatics.html");
 var appraise = new Skill("Appraise", "Appraise", intelligence, false, false, "http://paizo.com/pathfinderRPG/prd/skills/appraise.html");
 var bluff = new Skill("Bluff", "Bluff", charisma, false, false, "http://paizo.com/pathfinderRPG/prd/skills/bluff.html");
