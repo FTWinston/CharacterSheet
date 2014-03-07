@@ -1,6 +1,4 @@
 $(function() {
-	$('#tabs').tabs();
-	
 	$(".ui-tabs-panel").each(function(i) {
 		var output = '<div id="nav">';
 		if (i != 0)
@@ -176,7 +174,7 @@ $(function() {
 		output += '<tr><td><input type="checkbox" class="cs' + skill.name + ' classSkill" disabled="disabled" /></td><td>' + skill.displayName;
 		if ( skill.trainedOnly )
 			output += '<sup>*</sup>';
-		output += '</td><td class="right"><span class="skillTot' + skill.name + ' emphasis">0</span>&nbsp;=</td><td><input type="text" class="number skillRanks" id="skillRanks' + skill.name + '" value="0" min="0" /></td><td class="right abModifier' + skill.ability.abbrev + '"></td><td class="small">(' + skill.ability.abbrev + ')</td><td><span class="trained" style="display:none;">+3 <span class="small">(class)</span></span></td></tr>';
+		output += '</td><td class="right"><span class="skillTot' + skill.name + ' emphasis">0</span>&nbsp;=</td><td><input type="text" class="number skillRanks" id="skillRanks' + skill.name + '" value="0" min="0" /></td><td class="right abModifier' + skill.ability.abbrev + '"></td><td class="small">(' + skill.ability.abbrev + ')</td><td><span class="trained" style="display:none;" title="This is a class skill">+3 <span class="small">(class)</span></span></td></tr>';
 	}
 	$('#tabSkills table:first').append(output);
 	
@@ -217,6 +215,9 @@ $(function() {
 	});
 	
 	$('#printOnly input').prop("readonly", true);
+	
+	$('#tabs').tabs({ heightStyle: "auto" });
+	$(document).tooltip();
 	
 	load();
 	$('#race, #characterLevel, #tabBasicInfo input, #tabBasicInfo select, .ability.racial:checked, #favoredClass, #multiclass').change();
@@ -382,10 +383,17 @@ function calculateSkills()
 function calculateSkill(i, updateTotal)
 {
 	var skill = Skills[i]; 
-	skill.ranksTrained = Number($('#skillRanks' + skill.name).val());
+	var input = $('#skillRanks' + skill.name);
+	skill.ranksTrained = Number(input.val());
 	$('.skillRanksOut' + skill.name).text(skill.ranksTrained);
 	$('.skillTot' + skill.name).text(skill.getTotal());
 	
+	var trained = input.closest('tr').find('.trained:first');
+	if ( skill.isClassSkill && skill.ranksTrained > 0 )
+		trained.show();
+	else
+		trained.hide();
+
 	if ( updateTotal )
 	{
 		var sum = 0;
