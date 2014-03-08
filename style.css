@@ -22,8 +22,16 @@ elements on the screen layout only
 .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active:hover { background:#ffffff; }
 .ui-tabs-vertical .ui-tabs-nav li a { display:block; width:8em; color:#0088ff; font-size:16px; }
 .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a { color:#212121; }
-.ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 40em; position:relative; }
+.ui-tabs-vertical .ui-tabs-panel { padding-top: 0; float: right; width: 40em; position:relative; }
 .ui-tabs-vertical .ui-tabs-nav *:focus { outline: 0; }
+
+.tabHeading
+{	
+    width: 50%;
+    margin: 0 auto;	
+	font-weight:bold;
+	font-size:20px;
+}
 
 .tabNav
 {
@@ -36,6 +44,11 @@ elements on the screen layout only
 {
 	color:#0088ff;
 	font-size:16px;
+}
+
+#tabs p
+{
+	text-align:justify;
 }
 
 .save

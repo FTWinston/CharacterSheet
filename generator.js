@@ -185,13 +185,13 @@ $(function() {
 	$('#printOnly input').prop("readonly", true);
 	
 	$('#tabs')
-		.tabs(/*{ heightStyle: "auto" }*/)
-		.addClass("ui-tabs-vertical ui-helper-clearfix")
+		.tabs(/*{ heightStyle: 'auto' }*/)
+		.addClass('ui-tabs-vertical ui-helper-clearfix')
 		.find('.ui-tabs-nav').removeClass('ui-corner-all');
 
-    $("#tabs li").removeClass("ui-corner-top").addClass("ui-corner-left");
+    $('#tabs li').removeClass('ui-corner-top').addClass('ui-corner-left');
 	
-	$(".ui-tabs-panel").each(function(i) {
+	$('#tabs .ui-tabs-nav li a').each(function(i) {
 		var output = '<div class="tabNav">';
 		if (i != 0)
 			output += '<a class="lnkPrevTab" href="#">&#171; Prev</a>  ';
@@ -204,8 +204,14 @@ $(function() {
 		else
 			output += '<a class="lnkNextTab" href="#" style="visibility:hidden;">Next &#187;</a>';
 		
-		output += '</div>';
-		$(this).append(output);
+		var heading = $(this).attr('heading');
+		if ( heading == undefined )
+			heading = $(this).text();
+		
+		output += '</div><div class="tabHeading">' + heading + '</div>';
+		
+		var panel = $(this).attr('href');
+		$(panel).prepend(output);
 	});
 	
 	$('.lnkPrevTab').click(function() {
