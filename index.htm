@@ -5,8 +5,8 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
 
-<link rel="stylesheet" href="style.css" type="text/css" />
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" type="text/css" />
+<link rel="stylesheet" href="style.css" type="text/css" />
 
 <script type="text/javascript" src="base.js"></script>
 <script type="text/javascript" src="model.js"></script>
@@ -17,21 +17,7 @@
 
 <div id="screenOnly">
 
-<table id="root">
-<tr>
-<td id="toolbar" class="ui-widget-content ui-corner-all">
-<div class="ui-widget-header ui-corner-all ui-helper-clearfix"><span class="ui-dialog-title">Save your character</span></div>
-<div style="width: auto; min-height: 0px; max-height: none;">
-	<p>To save a link to this character sheet, click a button below.</p>
-	
-	<div id="saveLong" class="save">Long URL</div>
-	<div id="saveTiny" class="save tiny">Short URL</div>
-	<div class="tiny help spacer" style="display:none">Can't use bit.ly for a local file.</div>
-	
-	<p>This will be displayed at the bottom of the page.</p>
-</div>
-</td>
-<td id="tabs">
+<div id="tabs">
   <ul>
     <li><a href="#tabIntro">Intro</a></li>
     <li><a href="#tabBasicInfo">Basics</a></li>
@@ -42,6 +28,7 @@
 	<li><a href="#tabFeats">Feats</a></li>
 	<li><a href="#tabEquipment">Equipment</a></li>
 	<li><a href="#tabSpells">Spells</a></li>
+	<li><a href="#tabSave">Save</a></li>
   </ul>
 
   <div id="tabIntro">
@@ -132,9 +119,16 @@
   <div id="tabSpells">
 	<p>Not implemented.</p>
   </div>
-</td>
-</tr>
-</table>
+  <div id="tabSave">
+	<p>To save a link to this character sheet, click a button below.</p>
+	
+	<div id="saveLong" class="save">Long URL</div>
+	<div id="saveTiny" class="save tiny">Short URL</div>
+	<div class="tiny help spacer" style="display:none">Can't use bit.ly for a local file.</div>
+	
+	<p>This will be displayed at the bottom of the page.</p>
+  </div>
+</div>
 
 <div id="savedLink" class="center"></div>
 

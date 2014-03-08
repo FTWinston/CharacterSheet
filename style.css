@@ -7,45 +7,35 @@ elements on the screen layout only
 
 */
 
-table.root
-{
-	width:100%;
-}
-
-td#tabs
+#tabs
 {
 	vertical-align:top;
-	width:910px;
 }
 
-.ui-tabs-panel
-{
-	position:relative;
-}
+.ui-tabs-panel { }
 
-#nav
+.ui-tabs-vertical { width: 910px; border: none; }
+.ui-tabs-vertical .ui-tabs-nav { padding: 0 .1em 0 .2em; float: left; width: 8em; background: #ffffff; border-width: 0px 1px 0px 0px; }
+.ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border: solid #ffffff 1px; background: #ffffff; border-right-width: 0px; margin: 0 -1px .2em 0; }
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { border-color: #cccccc; padding: 0 .1em 0 0; margin-bottom:.2em; }
+.ui-tabs-vertical .ui-tabs-nav li:hover { background:#eeeeee; }
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active:hover { background:#ffffff; }
+.ui-tabs-vertical .ui-tabs-nav li a { display:block; width:8em; color:#0088ff; font-size:16px; }
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a { color:#212121; }
+.ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 40em; position:relative; }
+.ui-tabs-vertical .ui-tabs-nav *:focus { outline: 0; }
+
+.tabNav
 {
 	position:absolute;
-	top: 9px;
-	left: 20px;
+	top: 0px;
+	left: 18px;
 }
 
-td#tabs .ui-tabs-anchor
+.tabNav a
 {
-	font-size:14px;
-	font-weight:bold;
-}
-
-td#toolbar
-{
-	width: 180px;
-	vertical-align:top;
-	padding: 3px;
-}
-
-td#toolbar .ui-widget-header
-{
-	padding: 4px 4px 4px 10px;
+	color:#0088ff;
+	font-size:16px;
 }
 
 .save
@@ -111,22 +101,13 @@ td#toolbar .ui-widget-header
 #tabBasicInfo th, #tabClasses th
 {
 	text-align:right;
+	white-space:nowrap;
 }
 
 input.number
 {
 	width: 30px;
 	text-align:right;
-}
-
-.feature.ui-accordion-content
-{
-	margin-bottom: 12px;
-}
-
-.ui-accordion .feature.ui-accordion-header
-{
-	cursor:auto;
 }
 
 /*
@@ -163,6 +144,7 @@ th { font-weight: normal; }
 .logo img { width:200px; height:50px; }
 
 /* basic info */
+
 #printOnly .basicInfo
 {
 	position: absolute;
