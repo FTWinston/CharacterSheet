@@ -123,6 +123,11 @@ input.number
 	text-align:right;
 }
 
+.ui-accordion-content.feature
+{
+	margin-bottom:10px;
+}
+
 /*
 
 elements in the print layout only

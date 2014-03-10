@@ -57,12 +57,11 @@ $(function() {
 			calculateAbilities();
 		});
 	
-	output = ''; out2 = ''; out3 = ''
+	output = ''; out2 = '';
 	for (var i=0;i<Classes.length;i++){
 		var name = Classes[i].name;
 		output += '<option value="' + name + '">' + name + '</option>';
-		out2 += '<tr class="multiclass" style="display:none;"><th>' + name + '</th><td><input class="number levels" type="text" min="0" max="30" id="levels' + name + '" value="0" /> levels</td><td class="help"></td></tr>';
-		out3 += '<h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top feature ' + name + '" style="display:none;"><span class="heading">' + name + '</span> - level <span class="level">1</span></h3><div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom feature ' + name + '" style="display:none;">Not yet implemented</div>';
+		out2 += '<h3 class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top feature ' + name + '" style="display:none;"><span class="heading">' + name + '</span> - level <span class="level">1</span></h3><div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom feature ' + name + '" style="display:none;">Not yet implemented</div>';
 	}
 	$('#favoredClass')
 		.append(output)
@@ -73,15 +72,17 @@ $(function() {
 			
 			SelectedClass = newClass;
 			
-			checkLevels(true);
+			if ( !$('#multiclass').prop('checked') )
+				$('select.multiClassLevel').val(newClass.name);
+			
+			checkClasses();
 		});
 	
 	$('#multiclass')
-		.change(function() { if ( $(this).prop('checked') ) $('.multiclass').show(); else $('.multiclass').hide(); })
-		.closest('tr').next().after(out2);
+		.change(function() { if ( $(this).prop('checked') ) $('.multiclass').show(); else $('.multiclass').hide(); });
 	
-	$('#tabFeatures').append(out3);
-	output = ''; out2 = ''; out3 = '';
+	$('#tabFeatures').append(out2);
+	output = ''; out2 = '';
 	
 	$('#characterLevel').change(function() {
 		var level = $(this).val();
@@ -92,17 +93,7 @@ $(function() {
 				$(this).show();
 		});
 		$('.levels').attr('max', level.toString()).spinner({ max: level });
-		checkLevels(true);
-
-		if ( level == 1 ) {
-			$('.levelSingle').show();
-			$('.levelPlural').hide();
-		}
-		else {
-			$('.levelSingle').hide();
-			$('.levelPlural').show();
-		}
-		$('.numLevels').text(level);
+		checkLevels();
 	});
 	
 	$('.levels').change(function() {
@@ -112,7 +103,7 @@ $(function() {
 		
 		if ( sum <= limit )
 		{
-			checkLevels(false);
+			checkLevels();
 			return;
 		}
 		
@@ -120,7 +111,7 @@ $(function() {
 		var toReduce = $('.levels').filter(function () { return $(this).val() > 0 && $(this).attr('id') != id; }).first();
 		toReduce.val(toReduce.val() - 1);
 		
-		checkLevels(false);
+		checkLevels();
 	});
 	
 	$('.bonus').change(function() {
@@ -164,9 +155,9 @@ $(function() {
     height: 600,
 	title: "From the paizo.com Pathfinder PRD",
 	open: function(){
-		$('.ui-widget-overlay').bind('click',function(){
+		$('.ui-widget-overlay').click(function(){
 			$('#helpPopup').dialog('close');
-		})
+		});
 	},
     close: function(ev, ui) {
              $('#helpIframe').attr('src','');
@@ -245,32 +236,67 @@ function addSign(num)
 	return num;
 }
 
-function checkLevels(tryPutAllAllFavored)
+function checkLevels()
 {
 	var totLevel = $('#characterLevel').val();
-	var favoredSel = '#levels' + $('#favoredClass').val();
-	// if not multiclassing, changing class/level puts all points into your favored class
-	if ( tryPutAllAllFavored && $('.levels').filter(function () { return $(this).val() > 0; }).length < 2 ) {
-		$('.levels').val(0);
-		$(favoredSel).val(totLevel);
+	
+	// create any multiclass selectors that are needed that don't exist. Delete any that are not.
+	var out = ''; var firstNew = null;
+	for ( var i=1; i<=totLevel; i++ )
+	{
+		var row = $('.multiclass.level[level="' + i + '"]');
+		if ( row.length == 0 )
+		{// create a class selector for this level
+			out += '<tr class="multiclass level" style="display:none;" level="' + i + '"><th>Level ' + i + '</th><td><select class="multiClassLevel" id="classLevel' + i + '" value="0" /></td><td class="help"></td></tr>';
+			
+			if ( firstNew == null )
+				firstNew = i;
+		}
 	}
+	$('#multiclassEnd').before(out);
 	
-	var levels = $(favoredSel).val();
-	$('#favoredClassLevels').text(levels);
-	$('.bonus').attr('max', levels).spinner({ max: Number(levels) });
+	// remove any for levels beyond this one
+	$('.multiclass.level').filter(function() { return $(this).attr('level') > totLevel; }).remove();
 	
-	// count unallocated levels
-	var totAllocated = 0;
-	$('.levels').each(function() {
-        totAllocated += Number($(this).val());
-    });
-	$('#levelsUnallocated').text(totLevel - totAllocated);
+	// any newly added ones need populated and their default set
+	if ( firstNew != null )
+	{
+		out = '';
+		for (var i=0;i<Classes.length;i++)
+		{
+			var name = Classes[i].name;
+			out += '<option value="' + name + '">' + name + '</option>';
+		}
+		
+		$('.multiclass.level').filter(function() { return $(this).attr('level') >= firstNew; })
+			.find('select.multiClassLevel')
+			.append(out)
+			.val($('#favoredClass').val())
+			.change(checkClasses);
+
+		$('#multiclass').change();
+	}
+	out = '';
+	
+	// max skill rank = total level
+	$('input.number.skillRanks').attr('max', totLevel.toString()).spinner({ max: totLevel });
+	
+	checkClasses();
+}
+
+function checkClasses()
+{
+	var favoredClass = $('#favoredClass').val();
+	var favoredLevels = $('select.multiClassLevel').filter(function() { return $(this).val() == favoredClass; }).length;
+	
+	$('#favoredClassLevels').text(favoredLevels);
+	$('.bonus').attr('max', favoredLevels).spinner({ max: Number(favoredLevels) });
 	
 	// check that the total number of bonus points isn't too high
 	var hp = $('#bonusHP').val(); var sp = $('#bonusSP').val();
-	if ( hp + sp > levels )
+	if ( hp + sp > favoredLevels )
 	{
-		var reduce = hp + sp - levels;
+		var reduce = hp + sp - favoredLevels;
 		if ( hp >= reduce )
 		{
 			hp -= reduce;
@@ -279,16 +305,16 @@ function checkLevels(tryPutAllAllFavored)
 		else
 		{
 			hp = 0;
-			sp = levels
+			sp = favoredLevels
 			$('#bonusHP').val(hp);
 			$('#bonusSP').val(sp);
 		}
 	}
 	
 	// report unallocated bonus points
-	$('#bonusUnallocated').text(levels - hp - sp);
+	$('#bonusUnallocated').text(favoredLevels - hp - sp);
 	
-	if ( Number(levels) == 1 ) {
+	if ( Number(favoredLevels) == 1 ) {
 		$('.favoredSingle').show();
 		$('.favoredPlural').hide();
 	}
@@ -297,41 +323,48 @@ function checkLevels(tryPutAllAllFavored)
 		$('.favoredPlural').show();
 	}
 	
-	// class skills will have changed. To recalculate, first clear them all
+	// class levels, class skills and feature selection could have changed. To recalculate, first clear them all.
+	for (var i=0;i<Classes.length;i++ ) {
+		Classes[i].level = 0;
+	}
 	$('.classSkill').prop('checked', false);
 	for (var i=0;i<Skills.length;i++) {
 		Skills[i].isClassSkill = false;
 	}
-	
-	// show/hide feature selection for chosen classes
-	var classLevels = [];
 	$('.feature').hide();
-	$('.levels').each(function() {
-		var thisClass = Classes[$(this).closest('tr').index() - 3];
-		thisClass.level = $(this).val();
-		var level = thisClass.level;
+	
+	// work out the levels allocated to each class
+	$('select.multiClassLevel').each(function() {
+		var thisClass = Classes[$(this).prop("selectedIndex")];
+		thisClass.level ++;
+	});
+	
+	// now set the class skills, feature selectors, and class description output
+	var classOutput = [];
+	for (var i=0;i<Classes.length;i++ )
+	{
+		var level = Classes[i].level;
+		var name = Classes[i].name;
+		
+		$('.feature.' + name + ' .level').text(level);
 		
 		if ( level <= 0 )
-			return;
+			continue;
 		
-		var classname = thisClass.name;
-		$('.feature.' + classname + ' .level').text(level);
-		$('.feature.' + classname).show();
+		$('.feature.' + name).show();
 		
-		classLevels.push('Lvl ' + level + ' ' + classname);
+		classOutput.push('Lvl ' + level + ' ' + name);
 		
 		// update which skills are class skills	
-		var skills = thisClass.classSkills;
-		
-		for (var i=0;i<skills.length;i++) {
-			$('input.cs' + skills[i].name).prop('checked', true);
-			skills[i].isClassSkill = true;
+		var skills = Classes[i].classSkills;
+		for (var j=0;j<skills.length;j++) {
+			$('input.cs' + skills[j].name).prop('checked', true);
+			skills[j].isClassSkill = true;
 		}
-	});
-	$('#classLevelsOut').val(classLevels.join(', '));
+	}
+	$('#classLevelsOut').val(classOutput.join(', '));
 	
 	// if class skills changed, need to recalculate skills
-	$('input.number.skillRanks').attr('max', totLevel.toString()).spinner({ max: totLevel });
 	calculateSkills();
 }
 
