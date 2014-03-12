@@ -33,21 +33,32 @@ var Ability = Base.extend({
 var Abilities = [];
 
 var Race = Base.extend({
-  constructor: function(name, size, speed, abilities) {
+  constructor: function(name) {
     this.name = name;
-	this.size = size;
-	this.speed = speed;
-	this.abilities = abilities;
+	this.size = null;
+	this.speed = 30;
+	this.abilities = null;
+	this.vision = "Normal";
+	this.knownLanguages = [];
+	this.selectableLanguages = [];
+	this.bonusSkillsPerLevel = 0;
+	this.levelOneBonusFeat = false;
+	this.conditionalModifiers = [];
   },
   
   name: "",
   size: null,
   speed: 30,
   abilities: null,
+  vision: "Normal",
+  knownLanguages: [],
+  selectableLanguages: [],
+  bonusSkillsPerLevel: 0,
+  levelOneBonusFeat: false,
+  conditionalModifiers: [],
   
-  adjustSkills: function() {
-    console.log('base skills');
-  }
+  applyEffects: function() { },
+  undoEffects: function() { },
 });
 
 var Races = [];
@@ -66,12 +77,14 @@ var Skill = Base.extend({
   ability: null,
   trainedOnly: false,
   ranksTrained: 0,
+  miscBonus: 0,
   isClassSkill: false,
   requiresCustom: false,
   helpLink: "",
   
   reset: function() {
 	this.ranksTrained = 0;
+	this.miscBonus = 0;
 	this.isClassSkill = false;
   },
   

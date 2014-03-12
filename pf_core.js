@@ -66,140 +66,159 @@ Skills.push(acrobatics, appraise, bluff, climb, craft1, craft2, craft3, diplomac
 
 // ---
 
-var dwarf = new Race("Dwarf", Size_Medium,		20, [0, 0, 2, 0, 2, -2]);
+var dwarf = new Race("Dwarf");
+dwarf.size = Size_Medium;
+dwarf.speed = 20;
+dwarf.abilities = [0, 0, 2, 0, 2, -2];
+dwarf.vision = "Darkvision 60 ft";
+dwarf.knownLanguages = ["Common", "Dwarven"];
+dwarf.selectableLanguages = ["Giant", "Gnome", "Goblin", "Orc", "Terran", "Undercommon"];
+conditionalModifiers = ["+4 dodge bonus to AC against giants", "+2 to Appraise non-magic goods containing precious metal or gemstones", "+1 on attack rolls vs orc and goblinoid humanoids", "+2 on saving throws against poison, spells & SLA", "+4 to CMD when resisting bull rush or trip, if standing on the ground", "+2 perception to notice unusual stonework. Check whenever within 10 feet of such features, even when not actively looking."];
 dwarf.extend({
 	adjustSkills: function() {
-		console.log("dwarf skills");
+		
 	}
 /*
 	base speed 20, never modified by armor or encumbrance
-	Darkvision 60 ft
-	+4 dodge to AC vs giants
-	+2 racial to Appraise skill for nonmagic goods containing precious metal or gemstones
-	+1 bonus on attack rolls vs orc & goblinoid humanoids
-	+2 racial bonus on saving throws against poison, spells & SLA
-	+4 racial bonus to CMD when resisting bull rush or trip, if standing on the ground
-	+2 bonus to perception to notice unusual stonework. Check whenever within 10 feet of such features, even when not looking
-	
+		
 	proficient with battleaxes, heavy picks, warhammers
 	any weapon with "dwarven" in its name is martial
-	
-	initial languages: Common & Dwarven
-	language selection: Giant, Gnome, Goblin, Orc, Terran & Undercommon
 */
 });
 
-var elf = new Race("Elf", Size_Medium,			30, [0, 2, -2, 2, 0, 0]);
+var elf = new Race("Elf");
+elf.size = Size_Medium;
+elf.speed = 30;
+elf.abilities = [0, 2, -2, 2, 0, 0];
+elf.vision = "Low-light vision";
+elf.knownLanguages = ["Common", "Elven"];
+elf.selectableLanguages = ["Celestial", "Draconic", "Gnoll", "Gnome", "Goblin", "Orc", "Sylvan"];
+elf.conditionalModifiers = ["Immune to magic sleep effects", "+2 saving throw bonus against enchantment spells & effects", "+2 on caster level checks made to overcome spell resistance", "+2 on spellcraft checks to identify properties of magic items"];
 elf.extend({
+	applyEffects: function() {
+		perception.miscBonus += 2;
+	},
+	undoEffects: function() {
+		perception.miscBonus -= 2;
+	}
 /*
-	low light vision: can see twice as far as humans in dim light
-	immune to magic sleep effects
-	+2 racial saving throw bonus against enchantment spells & effects
-	+2 racial bonus on caster level checks made to overcome spell resistance
-	+2 racial bonus on spellcraft checks to identify properties of magic items
-	+2 to perception checks
-	
 	proficient with longbows (including composite longbows), longswords, rapiers, and shortbows (including composite shortbows)
-	any weapon with "elven" in its name is martial
 	
-	initial languages: Common & Elven
-	language selection: Celestial, Draconic, Gnoll, Gnome, Goblin, Orc & Sylvan
+	any weapon with "elven" in its name is martial
 */
 });
-var gnome = new Race("Gnome", Size_Small,		20, [-2, 0, 2, 0, 0, 2]);
+
+var gnome = new Race("Gnome");
+gnome.size = Size_Small;
+gnome.speed = 20;
+gnome.abilities = [-2, 0, 2, 0, 0, 2];
+gnome.vision = "Low-light vision";
+gnome.knownLanguages = ["Common", "Gnome", "Sylvan"];
+gnome.selectableLanguages = ["Draconic", "Dwarven", "Elven", "Giant", "Goblin", "Orc"];
+gnome.conditionalModifiers = ["+4 dodge bonus to AC against giants", "+1 to the DC of saving throws against illusion spells you cast", "+1 on attack roles against reptilian and goblinoid humanoids", "+2 racial saving throw against illusion spells & effects"];
 gnome.extend({
+	applyEffects: function() {
+		perception.miscBonus += 2;
+	},
+	undoEffects: function() {
+		perception.miscBonus -= 2;
+	}
 /*
 	small size - +1 to AC, +1 to attack rolls, -1 to CMB and CMD, +4 size bonus to stealth checks
-	
-	Low light vision
-	
-	+4 dodge bonus to AC vs giants
-	+1 to the DC of any saving throws against illusion spells they cast.
 	
 	If charisma > 11, gain the following SLAs 1/day:
 	dancing lights, ghost sound, prestigitation and speak with animals.
 	For each, caster level is gnome's level.
 	DC is 10 + spell's level + charisma modifier.
 	
-	+1 on attack roles against reptilian and goblinoid humanoids.
-	+2 racial saving throw against illusion spells & effects
-	+2 to perception checks
 	+2 racial bonus on a craft or profession skill of their choice (Obssesive)
 	
 	any weapon with "gnome" in its name is martial
-	
-	initial languages: Common, Gnome & Sylvan
-	language selection: Draconic, Dwarven, Elven, Giant, Goblin, & Orc.
 */
 });
 
-var halfElf = new Race("Half-Elf", Size_Medium,	30, null);
+var halfElf = new Race("Half-Elf");
+halfElf.size = Size_Medium;
+halfElf.speed = 30;
+halfElf.abilities = null;
+halfElf.vision = "Low-light vision";
+halfElf.knownLanguages = ["Common", "Elven"];
+halfElf.selectableLanguages = ["Abyssal", "Celestial", "Common", "Draconic", "Dwarven", "Elven", "Giant", "Gnoll", "Gnome", "Goblin", "Orc", "Sylvan", "Terran", "Undercommon"]; // "any"
+halfElf.conditionalModifiers = ["Immune to magic sleep effects", "+2 to saving throws against enchantment spells & effects"];
 halfElf.extend({
+	applyEffects: function() {
+		perception.miscBonus += 2;
+	},
+	undoEffects: function() {
+		perception.miscBonus -= 2;
+	}
 /*
-	Low light vision
-	
 	Skill Focus as a bonus feat at 1st level.
 	
-	immune to magic sleep effects
-	+2 racial saving throw bonus against enchantment spells & effects
-	+2 to perception checks
-	
 	Choose two favored classes at first level instead of one.
-	
-	initial languages: Common & Elven
-	language selection: any (but not secret languages, such as druidic)
 */
 });
 
-var halfOrc = new Race("Half-Orc", Size_Medium,	30, null);
+var halfOrc = new Race("Half-Orc");
+halfOrc.size = Size_Medium;
+halfOrc.speed = 30;
+halfOrc.abilities = null;
+halfOrc.vision = "Darkvision 60 ft";
+halfOrc.knownLanguages = ["Common", "Orc"];
+halfOrc.selectableLanguages = ["Abyssal", "Draconic", "Giant", "Gnoll", "Goblin"];
 halfOrc.extend({
+	applyEffects: function() {
+		intimidate.miscBonus += 2;
+	},
+	undoEffects: function() {
+		intimidate.miscBonus -= 2;
+	}
 /*
-	Darkvision 60 ft
-	
-	+2 to intimidate checks
-	
 	Once per day, when brought below 0 hp but not killed, can fight on for 1 more round as if disabled.
 	
 	proficient with greataxes and falchions
 	any weapon with "orc" in its name is martial
-	
-	initial languages: Common & Orc
-	language selection:  Abyssal, Draconic, Giant, Gnoll, & Goblin.
 */
 });
 
-var halfling = new Race("Halfling", Size_Small,	20, [-2, 2, 0, 0, 0, 2]);
+var halfling = new Race("Halfling");
+halfling.size = Size_Small;
+halfling.speed = 20;
+halfling.abilities = [-2, 2, 0, 0, 0, 2];
+halfling.vision = "Normal";
+halfling.knownLanguages = ["Common", "Halfling"];
+halfling.selectableLanguages = ["Dwarven", "Elven", "Gnome", "Goblin"];
+halfling.conditionalModifiers = ["+2 to saving throws against fear effects"];
 halfling.extend({
+	applyEffects: function() {
+		acrobatics.miscBonus += 2;
+		climb.miscBonus += 2;
+		perception.miscBonus += 2;
+	},
+	undoEffects: function() {
+		acrobatics.miscBonus -= 2;
+		climb.miscBonus -= 2;
+		perception.miscBonus -= 2;
+	}
 /*
 	small size - +1 to AC, +1 to attack rolls, -1 to CMB and CMD, +4 size bonus to stealth checks
 	
 	+1 on all saving throws
-	+2 on all saving throws against fear (in addition)
-	+2 to perception checks
-	+2 to acrobatics and climb checks
 	
 	proficient with slings
 	any weapon with "halfling" in its name is martial
-	
-	initial languages: Common & Halfling
-	language selection: Dwarven, Elven, Gnome, & Goblin
 */
 });
 
-var human = new Race("Human", Size_Medium,		30, null);
-human.extend({
-/*
-	Select 1 bonus feat at 1st level
-	
-	Gain an additional skill at every level.
-	
-	proficient with 
-	any weapon with "" in its name is martial
-	
-	initial languages: Common
-	language selection: any (but not secret languages, such as druidic)
-*/
-});
+var human = new Race("Human");
+human.size = Size_Medium;
+human.speed = 30;
+human.abilities = null;
+human.vision = "Normal";
+human.knownLanguages = ["Common"];
+human.selectableLanguages = ["Abyssal", "Celestial", "Common", "Draconic", "Dwarven", "Elven", "Giant", "Gnoll", "Gnome", "Goblin", "Orc", "Sylvan", "Terran", "Undercommon"]; // "any"
+human.bonusSkillsPerLevel = 1;
+human.levelOneBonusFeat = true;
 
 Races.push(dwarf, elf, gnome, halfElf, halfOrc, halfling, human);
 
